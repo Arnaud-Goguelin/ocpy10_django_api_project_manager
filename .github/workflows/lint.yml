@@ -1,0 +1,26 @@
+name: Code linting
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+
+    - name: Set up Python
+      run: uv python install 3.13
+
+
+    - name: Install dependencies
+      run: uv sync --group dev
+      working-directory: .
+
+    - name: Run ruff check
+      run: uv run ruff check .
+      working-directory: .
