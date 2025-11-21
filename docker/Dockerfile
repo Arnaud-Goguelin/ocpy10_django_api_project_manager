@@ -23,7 +23,7 @@ WORKDIR /usr/src/app
 # Environment variables for Python
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-ENV DJANGO_SETTINGS_MODULE=ocpy10.settings
+ENV DJANGO_SETTINGS_MODULE=config.settings
 
 RUN adduser --system --no-create-home nonroot
 
@@ -37,12 +37,11 @@ ENV PATH="/usr/src/app/.venv/bin:$PATH"
 COPY . .
 
 # Copy and set permissions for entrypoint script
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+COPY docker/entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 USER nonroot
 
 EXPOSE 8000
 
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD []
+ENTRYPOINT ["entrypoint.sh"]
