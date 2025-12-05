@@ -15,6 +15,9 @@ WORKERS=${WORKERS:-1}
 
 echo "Starting application in $ENVIRONMENT mode..."
 
+    echo "Starting background scheduler..."
+    sh /usr/local/bin/scheduler.sh &
+
 if [ "$ENVIRONMENT" = "development" ]; then
     echo "Running Django development server..."
     exec python manage.py runserver 0.0.0.0:8000

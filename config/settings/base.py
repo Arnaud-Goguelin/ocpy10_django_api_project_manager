@@ -146,6 +146,7 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
     # store in a black list (in DB) the old refresh token to avoid reuse
     # plan a crom to use flushexpiredtokens to clean DB of old expired tokens, unusable anyway
+    # cf. shell scripts in docker folder to check cron jobs
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
