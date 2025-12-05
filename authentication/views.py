@@ -1,23 +1,12 @@
 import logging
 
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
 logger = logging.getLogger(__name__)
-
-
-class LoginView(TokenObtainPairView):
-    """
-    User login endpoint - returns access and refresh tokens.
-    POST /api/auth/login/
-    Body: {"username": "...", "password": "..."}
-    """
-
-    permission_classes = [AllowAny]
 
 
 class LogoutView(APIView):
@@ -46,13 +35,3 @@ class LogoutView(APIView):
                 str(error),
                 status=400,
             )
-
-
-class TokenRefreshView(TokenRefreshView):
-    """
-    Refresh access token using refresh token.
-    POST /api/auth/token/refresh/
-    Body: {"refresh": "..."}
-    """
-
-    permission_classes = [AllowAny]
