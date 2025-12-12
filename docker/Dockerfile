@@ -39,7 +39,7 @@ COPY . .
 # Copy and set permissions for entrypoint script
 COPY docker/entrypoint.sh /usr/local/bin/
 COPY docker/scheduler.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/scheduler.
+RUN chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/scheduler.sh
 
 USER nonroot
 
