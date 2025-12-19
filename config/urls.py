@@ -26,6 +26,8 @@ urlpatterns = [
     path("api/auth/", include("authentication.urls")),
     # user object related
     path("api/user/", include("user.urls")),
+    # project object related
+    path("api/project/", include("project.urls")),
     # docs
     path("api/docs/", SpectacularAPIView.as_view(), name="docs"),
     path("api/docs/swagger/", SpectacularSwaggerView.as_view(url_name="docs"), name="swagger"),
