@@ -1,22 +1,13 @@
-import io
 import logging
-import os
-import uuid
-
-from pathlib import Path
 
 from django.conf import settings
-from django.core.files.base import ContentFile
 from django.db import models
-from django.db.models.signals import post_delete, pre_save
-from django.dispatch import receiver
 
 
 logger = logging.getLogger("projects")
 
 
 class Project(models.Model):
-
     class ProjectTypes(models.TextChoices):
         backend = "backend"
         frontend = "frontend"
