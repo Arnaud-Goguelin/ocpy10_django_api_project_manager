@@ -8,8 +8,8 @@ from user.models import User
 
 logger = logging.getLogger("projects")
 
-class Contributor(models.Model):
 
+class Contributor(models.Model):
     class ContributorRoles(models.TextChoices):
         admin = "admin", "Admin"
         contributor = "contributor", "Contributor"
@@ -19,6 +19,7 @@ class Contributor(models.Model):
     project = models.ForeignKey("project.Project", on_delete=models.CASCADE)
     role = models.CharField(choices=ContributorRoles)
     pass
+
 
 class Project(models.Model):
     class ProjectTypes(models.TextChoices):
@@ -31,7 +32,9 @@ class Project(models.Model):
     # if a Project in DB is still referencing it
     # example: a User can be deleted only if he is not referenced by any Project
     author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="projects")
-    contributors = models.ManyToManyField(to=settings.AUTH_USER_MODEL, through=Contributor, related_name="contributed_projects")
+    contributors = models.ManyToManyField(
+        to=settings.AUTH_USER_MODEL, through=Contributor, related_name="contributed_projects"
+    )
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     type = models.CharField(choices=ProjectTypes)
