@@ -1,15 +1,22 @@
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from user.serializers import UserSerializer
+
 from .models import User
 from .permissions import IsUserSelf
-from .serializers import UserSerializer
 
 
+@extend_schema(summary="Create a user account", tags=["User"])
 class SignupView(CreateAPIView):
     """
-    Handles the signup process by providing an API view for user creation.
-    This is a public view, no authentication is required.
+    Represents a view for handling user signup operations in order to create a new account.
+    <br>It creates a User object in DB.
+    <br>Returns a `201 Created` response code on success.
+    <br>
+    <br>**Authentification required**: No
+    <br>**Permissions required**: None
     """
 
     queryset = User.objects.all()
@@ -17,9 +24,41 @@ class SignupView(CreateAPIView):
     permission_classes = [AllowAny]
 
 
+@extend_schema_view(
+    get=extend_schema(
+        summary="Get user profile",
+        tags=["User"],
+    ),
+    put=extend_schema(
+        summary="Update entirely user's profile",
+        tags=["User"],
+    ),
+    patch=extend_schema(
+        summary="Update one or plus user's profile fields",
+        tags=["User"],
+    ),
+    delete=extend_schema(
+        summary="Delete user's account",
+        tags=["User"],
+    ),
+)
 class UserProfileView(RetrieveUpdateDestroyAPIView):
     """
-    Handles user profile operations including get, update, and deletion.
+    Represents the user profile view for interacting with authenticated user data.
+    <br>Provides endpoints for:
+     <br>GET a User object in DB,
+     <br>PUT a User object in DB,
+     <br>PATCH a User object in DB,
+     <br>DELETE a User object in DB.
+    <br>
+    <br>Returns a `200` response code on success.
+    <br>Raises a `400` error code if the request body is not valid.
+    <br>Raises a `403` error code if the user is not authenticated.
+    <br>Raises a `403` error code if the user is not the owner of the profile manipulated.
+    <br>Raises a `404` error code if the user is not found.
+    <br>
+    <br>**Authentification required**: Yes
+    <br>**Permissions required**: `IsAuthenticated`, `IsUserSelf` (User is the owner of the profile manipulated)
     """
 
     queryset = User.objects.all()

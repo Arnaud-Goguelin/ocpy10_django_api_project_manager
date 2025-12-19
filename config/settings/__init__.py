@@ -18,4 +18,7 @@ else:
     from .local import *
     print()
     print(f"🚀 Django run in: {environment} environment.")
+    print("📖 Docs access to : "
+          "\nhttp://127.0.0.1:8000/api/docs/swagger/, "
+          "\nhttp://127.0.0.1:8000/api/docs/redoc/")
     print()
