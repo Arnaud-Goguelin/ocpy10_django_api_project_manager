@@ -1,9 +1,9 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from jsonschema import ValidationError
-from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from user.serializers import UserSerializer
+from user.serializers import GDPRExportSerializer, UserSerializer
 
 from .models import User
 from .permissions import IsUserSelf
@@ -75,3 +75,25 @@ class UserProfileView(RetrieveUpdateDestroyAPIView):
                 "Please transfer ownership of your projects first."
             )
         instance.delete()
+
+
+@extend_schema(
+    summary="Export user's personal data (GDPR)",
+    description="Returns all personal data associated with the user account in JSON format. "
+    "<br>Returns a `200` response code on success."
+    "<br>Raises a `403` error code if the user is not authenticated."
+    "<br>Raises a `403` error code if the user tries to access another user's data."
+    "<br>"
+    "<br>**Authentification required**: Yes"
+    "<br>**Permissions required**: `IsAuthenticated`, `IsUserSelf`",
+    tags=["User"],
+)
+class GDPRExportView(RetrieveAPIView):
+    """
+    Endpoint for GDPR-compliant data export.
+    Allows users to download all their personal data.
+    """
+
+    queryset = User.objects.all()
+    serializer_class = GDPRExportSerializer
+    permission_classes = [IsAuthenticated, IsUserSelf]

@@ -8,4 +8,5 @@ app_name = "user"
 urlpatterns = [
     path("signup/", views.SignupView.as_view(), name="signup"),
     path("profile/<int:pk>/", views.UserProfileView.as_view(), name="profile"),
+    path("profile/<int:pk>/export-data/", views.GDPRExportView.as_view(), name="gdpr-export"),
 ]

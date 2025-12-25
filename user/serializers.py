@@ -84,3 +84,16 @@ class UserSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+
+class GDPRExportSerializer(UserSerializer):
+    """Serializer for GDPR data export -  extends UserSerializer with additional data"""
+
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + [
+            "id",
+            "first_name",
+            "last_name",
+            "date_joined",
+            "last_login",
+        ]
