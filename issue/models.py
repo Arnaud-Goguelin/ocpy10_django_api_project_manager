@@ -35,3 +35,11 @@ class Issue(models.Model):
     priority = models.CharField(choices=Priority, default=Priority.low)
     tags = models.CharField(choices=Tags, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Comment(models.Model):
+    issue = models.ForeignKey(to=Issue, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    content = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
