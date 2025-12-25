@@ -28,8 +28,11 @@ urlpatterns = [
     path("api/user/", include("user.urls")),
     # project object related
     path("api/project/", include("project.urls")),
-    # issue object related
-    # as issues depend of projects, url still contains /project/{{ project_id }}
+    # issue and comment object related
+    # as issues depend on projects, url still contains /project/{{ project_id }}
+    #
+    # as comments depend on issues, which depend on projects, url still contains
+    # /project/{{ project_id }}/issue/{{ issue_id }}
     path("api/project/", include("issue.urls")),
     # docs
     path("api/docs/", SpectacularAPIView.as_view(), name="docs"),
