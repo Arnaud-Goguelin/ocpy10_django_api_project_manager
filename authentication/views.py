@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from .serializers import LogoutSerializer
+
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +49,6 @@ class DecoratedTokenRefreshView(TokenRefreshView):
     pass
 
 
-@extend_schema_view(post=extend_schema(summary="Logout user and invalidate refresh token", tags=["Auth"]))
 class LogoutView(APIView):
     """
     Represents the user view for logout.
@@ -60,6 +61,14 @@ class LogoutView(APIView):
 
     permission_classes = [IsAuthenticated]
 
+    # as this is a classic APIView, @extend_schema for docs
+    # must be set for each method and not for view
+    @extend_schema(
+        request=LogoutSerializer,
+        responses={200: None},
+        summary="Logout user and invalidate refresh token",
+        tags=["Auth"],
+    )
     def post(self, request):
         try:
             refresh_token = request.data.get("refresh")
