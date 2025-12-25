@@ -35,6 +35,19 @@ class IssueModelViewSet(ModelViewSet):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
     permission_classes = []
+    
+    def get_queryset(self):
+        """Filter issues by project_id from URL"""
+        project_id = self.kwargs.get('project_id')
+        return Issue.objects.filter(project_id=project_id)
+
+    def perform_create(self, serializer):
+        """Automatically set author and project when creating an issue"""
+        project_id = self.kwargs.get('project_id')
+        serializer.save(
+            author=self.request.user,
+            project_id=project_id
+        )
 
 
 @extend_schema_view(
