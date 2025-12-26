@@ -28,6 +28,7 @@ class Issue(models.Model):
 
     author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE, related_name="issues")
+    # TODO: check if many to many or one to many ???
     assigned_users = models.ManyToManyField(to=settings.AUTH_USER_MODEL, related_name="assigned_issues")
     title = models.CharField(max_length=255)
     content = models.TextField(blank=True)

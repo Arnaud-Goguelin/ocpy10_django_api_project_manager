@@ -25,6 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Date of birth cannot be in the future.")
         return value
 
+    # TODO: use it as staticmethod in model ?
     @staticmethod
     def calculate_age(date_of_birth: datetime) -> int:
         today = date.today()

@@ -40,10 +40,12 @@ class Project(models.Model):
     type = models.CharField(choices=ProjectTypes)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # TODO: delete useless property
     @property
     def get_contributors(self):
         return self.contributors.all()
 
+    # TODO: already done in patch ?
     def transfer_project_ownership(self, new_owner: "User"):
         if new_owner == self.author:
             raise ValueError("Cannot transfer project ownership to self.")
