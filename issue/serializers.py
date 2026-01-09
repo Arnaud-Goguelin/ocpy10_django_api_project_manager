@@ -11,8 +11,8 @@ class IssueSerializer(ModelSerializer):
 
     def create(self, validated_data):
         """Automatically set author and project from context"""
-        validated_data['author'] = self.context['request'].user
-        validated_data['project_id'] = self.context['project_id']
+        validated_data["author"] = self.context["request"].user
+        validated_data["project_id"] = self.context["project_id"]
         return super().create(validated_data)
 
 
@@ -24,6 +24,6 @@ class CommentSerializer(ModelSerializer):
 
     def create(self, validated_data):
         """Automatically set author and issue from context"""
-        validated_data['author'] = self.context['request'].user
-        validated_data['issue'] = self.context['issue']
+        validated_data["author"] = self.context["request"].user
+        validated_data["issue"] = self.context["issue"]
         return super().create(validated_data)

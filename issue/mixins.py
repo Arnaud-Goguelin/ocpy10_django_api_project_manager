@@ -1,10 +1,3 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view
-from rest_framework.viewsets import ModelViewSet
-
-from .models import Comment, Issue
-from .serializers import CommentSerializer, IssueSerializer
-
-
 class ProjectScopedMixin:
     """Mixin to automatically filter and inject project from URL"""
 
@@ -19,5 +12,5 @@ class ProjectScopedMixin:
     def get_serializer_context(self):
         """Add project_id to serializer context"""
         context = super().get_serializer_context()
-        context['project_id'] = self.kwargs.get("project_id")
+        context["project_id"] = self.kwargs.get("project_id")
         return context

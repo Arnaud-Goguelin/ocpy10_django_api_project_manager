@@ -2,9 +2,9 @@ from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.exceptions import NotFound
 from rest_framework.viewsets import ModelViewSet
 
+from .mixins import ProjectScopedMixin
 from .models import Comment, Issue
 from .serializers import CommentSerializer, IssueSerializer
-from .mixins import ProjectScopedMixin
 
 
 @extend_schema_view(
@@ -82,8 +82,8 @@ class CommentModelViewSet(ModelViewSet):
         if issue_id:
             try:
                 self.issue = Issue.objects.get(id=issue_id)
-            except Issue.DoesNotExist:
-                raise NotFound(f"Issue with id {issue_id} does not exist.")
+            except Issue.DoesNotExist as error:
+                raise NotFound(f"Issue with id {issue_id} does not exist.") from error
         else:
             self.issue = None
 
@@ -96,5 +96,5 @@ class CommentModelViewSet(ModelViewSet):
     def get_serializer_context(self):
         """Add issue to serializer context"""
         context = super().get_serializer_context()
-        context['issue'] = self.issue
+        context["issue"] = self.issue
         return context
