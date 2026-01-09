@@ -1,4 +1,5 @@
 from rest_framework import permissions
+
 from .models import Project
 
 
@@ -8,7 +9,6 @@ class IsContributor(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-
         # Only allow read operations
         if request.method not in permissions.SAFE_METHODS:
             return False
@@ -16,7 +16,7 @@ class IsContributor(permissions.BasePermission):
         # define project depending of obj type (Project or Issue, Comment, etc.)
         if isinstance(obj, Project):
             project = obj
-        elif hasattr(obj, 'project'):
+        elif hasattr(obj, "project"):
             # For Issue, Comment, etc.
             project = obj.project
         else:

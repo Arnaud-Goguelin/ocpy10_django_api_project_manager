@@ -3,11 +3,12 @@ from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
+from ..config.global_permissions import IsAuthor
+from ..project.permissions import IsContributor
 from .mixins import ProjectScopedMixin
 from .models import Comment, Issue
 from .serializers import CommentSerializer, IssueSerializer
-from ..project.permissions import IsContributor
-from ..config.global_permissions import IsAuthor
+
 
 @extend_schema_view(
     list=extend_schema(
