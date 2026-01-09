@@ -27,7 +27,7 @@ class Issue(models.Model):
         improvement = "improvement", "Improvement"
 
     # If User/Author is deleted, do not delete the issue to preserve history
-    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
+    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     # If Project is deleted, delete issue too (issue cannot exist without a project)
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE, related_name="issues")
     # relation with User table and not Contributor table because;
@@ -48,7 +48,7 @@ class Issue(models.Model):
 class Comment(models.Model):
     issue = models.ForeignKey(to=Issue, on_delete=models.CASCADE, related_name="comments")
     # If User/Author is deleted, do not delete the comment to preserve history
-    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
+    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=255)
     content = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
