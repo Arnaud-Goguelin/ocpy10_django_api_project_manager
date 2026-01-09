@@ -1,8 +1,12 @@
+from django.db.models import Q
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from project.models import Contributor, Project
 
+from ..config.global_permissions import IsAuthor
+from .permissions import IsContributor
 from .serializers import ContributorSerializer, ProjectSerializer
 
 
@@ -35,7 +39,11 @@ from .serializers import ContributorSerializer, ProjectSerializer
 class ProjectModelViewSet(ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated, IsAuthor | IsContributor]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Project.objects.filter(Q(contributors=user) | Q(author=user)).distinct()
 
 
 @extend_schema_view(
@@ -67,4 +75,4 @@ class ProjectModelViewSet(ModelViewSet):
 class ContributorModelViewSet(ModelViewSet):
     queryset = Contributor.objects.all()
     serializer_class = ContributorSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
