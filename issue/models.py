@@ -26,10 +26,17 @@ class Issue(models.Model):
         feature = "feature", "Feature"
         improvement = "improvement", "Improvement"
 
-    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # If User/Author is deleted, do not delete the issue to preserve history
+    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
+    # If Project is deleted, delete issue too (issue cannot exist without a project)
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE, related_name="issues")
-    # TODO: check if many to many or one to many ???
-    assigned_users = models.ManyToManyField(to=settings.AUTH_USER_MODEL, related_name="assigned_issues")
+    # relation with User table and not Contributor table because;
+    # - relatioship with Contributor would need two join queries to get all users assigned to an issue (request
+    # would be more complicated and heavy)
+    # - if a user leave a Project and is not Contributor anymore, but come back later all the links with its
+    # previous issues would be lost
+    # - to ensure only Contributor can be assigned to an Issue, use persmissions in views
+    assigned_users = models.ManyToManyField(to=settings.AUTH_USER_MODEL, related_name="assigned_issues", blank=True)
     title = models.CharField(max_length=255)
     content = models.TextField(blank=True)
     status = models.CharField(choices=Status, default=Status.todo)
@@ -40,7 +47,8 @@ class Issue(models.Model):
 
 class Comment(models.Model):
     issue = models.ForeignKey(to=Issue, on_delete=models.CASCADE, related_name="comments")
-    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # If User/Author is deleted, do not delete the comment to preserve history
+    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL)
     title = models.CharField(max_length=255)
     content = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
