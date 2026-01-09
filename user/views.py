@@ -1,9 +1,11 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema, extend_schema_view
 from jsonschema import ValidationError
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from user.serializers import GDPRExportSerializer, UserSerializer
+from .serializers import GDPRExportSerializer, UserSerializer
+from.renderers import CSVRenderer
 
 from .models import User
 from .permissions import IsUserSelf
@@ -77,7 +79,6 @@ class UserProfileView(RetrieveUpdateDestroyAPIView):
         instance.delete()
 
 
-# TODO: response in .csv not in JSON GET/profile/{id} already return JSON
 @extend_schema(
     summary="Export user's personal data (GDPR)",
     description="Returns all personal data associated with the user account in JSON format. "
@@ -88,7 +89,21 @@ class UserProfileView(RetrieveUpdateDestroyAPIView):
     "<br>**Authentification required**: Yes"
     "<br>**Permissions required**: `IsAuthenticated`, `IsUserSelf`",
     tags=["User"],
-)
+    responses={
+            200: OpenApiResponse(
+                response=OpenApiTypes.BINARY,
+                description="CSV file containing user's personal data",
+                examples=[
+                    OpenApiExample(
+                        name="GDPR CSV Export",
+                        value='username,email,date_of_birth,consent,age,id,first_name,last_name,date_joined,last_login\n'
+                              'john_doe,john@example.com,1990-01-15,true,36,1,John,Doe,2024-01-01T10:00:00Z,2026-01-09T08:00:00Z',
+                        media_type='text/csv',
+                        )
+                    ]
+                )
+        }
+    )
 class GDPRExportView(RetrieveAPIView):
     """
     Endpoint for GDPR-compliant data export.
@@ -98,3 +113,4 @@ class GDPRExportView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = GDPRExportSerializer
     permission_classes = [IsAuthenticated, IsUserSelf]
+    renderer_classes = [CSVRenderer]
