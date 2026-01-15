@@ -4,7 +4,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from config.docs import project_id_parameter, issue_id_parameter, comment_id_parameter
+from config.docs import DocsTypingParameters
 from project.models import Project
 from config.global_permissions import IsAuthor
 from project.permissions import IsContributor
@@ -18,32 +18,32 @@ from .serializers import CommentSerializer, IssueSerializer
     list=extend_schema(
         summary="Get all Issues",
         tags=["Issue"],
-        parameters=[project_id_parameter, issue_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value],
     ),
     retrieve=extend_schema(
         summary="Get an Issue",
         tags=["Issue"],
-        parameters=[project_id_parameter, issue_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value],
     ),
     create=extend_schema(
         summary="Create an Issue",
         tags=["Issue"],
-        parameters=[project_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value],
     ),
     update=extend_schema(
         summary="Update entirely an Issue",
         tags=["Issue"],
-        parameters=[project_id_parameter, issue_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value],
     ),
     partial_update=extend_schema(
         summary="Update one or many Issue's fields",
         tags=["Issue"],
-        parameters=[project_id_parameter, issue_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value],
     ),
     destroy=extend_schema(
         summary="Delete an Issue",
         tags=["Issue"],
-        parameters=[project_id_parameter, issue_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value],
     ),
 )
 class IssueModelViewSet(ModelViewSet):
@@ -69,32 +69,36 @@ class IssueModelViewSet(ModelViewSet):
     list=extend_schema(
         summary="Get all Comments",
         tags=["Comment"],
-        parameters=[project_id_parameter, issue_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value],
     ),
     retrieve=extend_schema(
         summary="Get an Comment",
         tags=["Comment"],
-        parameters=[project_id_parameter, issue_id_parameter, comment_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value,
+                    DocsTypingParameters.comment_id.value],
     ),
     create=extend_schema(
         summary="Create an Comment",
         tags=["Comment"],
-        parameters=[project_id_parameter, issue_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value],
     ),
     update=extend_schema(
         summary="Update entirely an Comment",
         tags=["Comment"],
-        parameters=[project_id_parameter, issue_id_parameter, comment_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value,
+                    DocsTypingParameters.comment_id.value],
     ),
     partial_update=extend_schema(
         summary="Update one or many Comment's fields",
         tags=["Comment"],
-        parameters=[project_id_parameter, issue_id_parameter, comment_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value,
+                    DocsTypingParameters.comment_id.value],
     ),
     destroy=extend_schema(
         summary="Delete an Comment",
         tags=["Comment"],
-        parameters=[project_id_parameter, issue_id_parameter, comment_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value,
+                    DocsTypingParameters.comment_id.value],
     ),
 )
 class CommentModelViewSet(ModelViewSet):

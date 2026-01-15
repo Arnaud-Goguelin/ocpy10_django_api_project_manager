@@ -4,7 +4,7 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from config.docs import project_id_parameter
+from config.docs import DocsTypingParameters
 from project.models import Contributor, Project
 
 from config.global_permissions import IsAuthor
@@ -15,12 +15,12 @@ from .serializers import ContributorSerializer, ProjectSerializer
     list=extend_schema(
         summary="Get all Projects",
         tags=["Project"],
-        parameters=[project_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value],
     ),
     retrieve=extend_schema(
         summary="Get a Project",
         tags=["Project"],
-        parameters=[project_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value],
     ),
     create=extend_schema(
         summary="Create a Project",
@@ -29,17 +29,17 @@ from .serializers import ContributorSerializer, ProjectSerializer
     update=extend_schema(
         summary="Update entirely a Project",
         tags=["Project"],
-        parameters=[project_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value],
     ),
     partial_update=extend_schema(
         summary="Update one or many Project's fields",
         tags=["Project"],
-        parameters=[project_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value],
     ),
     destroy=extend_schema(
         summary="Delete Project",
         tags=["Project"],
-        parameters=[project_id_parameter],
+        parameters=[DocsTypingParameters.project_id.value],
     ),
 )
 class ProjectModelViewSet(ModelViewSet):
