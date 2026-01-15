@@ -30,13 +30,6 @@ class Issue(models.Model):
     author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     # If Project is deleted, delete issue too (issue cannot exist without a project)
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE, related_name="issues")
-    # relation with User table and not Contributor table because;
-    # - relatioship with Contributor would need two join queries to get all users assigned to an issue (request
-    # would be more complicated and heavy)
-    # - if a user leave a Project and is not Contributor anymore, but come back later all the links with its
-    # previous issues would be lost
-    # - to ensure only Contributor can be assigned to an Issue, use persmissions in views
-    assigned_users = models.ManyToManyField(to=settings.AUTH_USER_MODEL, related_name="assigned_issues", blank=True)
     title = models.CharField(max_length=255)
     content = models.TextField(blank=True)
     status = models.CharField(choices=Status, default=Status.todo)
