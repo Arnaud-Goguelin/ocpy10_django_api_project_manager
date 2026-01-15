@@ -14,7 +14,7 @@ class IssueSerializer(ModelSerializer):
     def create(self, validated_data):
         """Automatically set author and project from context"""
         validated_data["author"] = self.context["request"].user
-        validated_data["project_id"] = self.context["project_id"]
+        validated_data["project"] = self.context["view"].project
         return super().create(validated_data)
 
 
