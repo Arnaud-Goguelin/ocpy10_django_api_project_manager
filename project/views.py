@@ -49,7 +49,12 @@ class ProjectModelViewSet(ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        return Project.objects.filter(Q(contributors=user) | Q(author=user)).distinct()
+        return (
+            Project.objects
+            .select_related("author")
+            .prefetch_related("contributors")
+            .filter(Q(contributors=user) | Q(author=user)).distinct()
+        )
 
 
 @extend_schema_view(
@@ -83,4 +88,8 @@ class ContributorModelViewSet(ProjectMixin, ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Contributor.objects.filter(project=self.project)
+        return (
+            Contributor.objects
+            .select_related("project", "user")
+            .filter(project=self.project)
+        )

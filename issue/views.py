@@ -50,7 +50,11 @@ class IssueModelViewSet(ProjectMixin, ModelViewSet):
 
     def get_queryset(self):
         """Filter by project_id from URL"""
-        return Issue.objects.filter(project=self.project)
+        return (
+            Issue.objects
+            .select_related('project', 'author')
+            .filter(project=self.project)
+        )
 
 
 @extend_schema_view(
@@ -116,13 +120,21 @@ class CommentModelViewSet(ProjectMixin, ModelViewSet):
         issue_id = self.kwargs.get("issue_id")
         try:
             # do not forget to filter by project, to ensure the issue is part of the current project
-            self.issue = Issue.objects.get(id=issue_id, project=self.project)
+            self.issue = (
+                Issue.objects
+                .select_related('project', 'author')
+                .get(id=issue_id, project=self.project)
+            )
         except Issue.DoesNotExist as error:
             raise NotFound(f"Issue with id {issue_id} does not exist.") from error
 
     def get_queryset(self):
         """Filter comments by issue"""
-        return Comment.objects.filter(issue=self.issue)
+        return (
+            Comment.objects
+            .select_related('author', "issue")
+            .filter(issue=self.issue)
+        )
 
     def get_serializer_context(self):
         """Add issue to serializer context"""
