@@ -7,6 +7,7 @@ class ProjectSerializer(ModelSerializer):
     class Meta:
         model = Project
         fields = ["name", "type", "description", "author", "contributors", "created_at"]
+        read_only_fields = ["created_at"]
 
     def create(self, validated_data):
         """Automatically set author from context"""
