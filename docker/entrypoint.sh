@@ -18,8 +18,8 @@ echo "Starting application in $ENVIRONMENT mode..."
     echo "Starting background scheduler..."
     sh /usr/local/bin/scheduler.sh &
 
-if [ "$ENVIRONMENT" = "development" ]; then
-    echo "Running Django development server..."
+if [ "$ENVIRONMENT" = "local" ]; then
+    echo "Running Django local server..."
     exec python manage.py runserver 0.0.0.0:8000
 else
   # use uvicorn as it support natively async request
