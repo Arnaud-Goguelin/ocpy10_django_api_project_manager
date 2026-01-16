@@ -7,16 +7,19 @@ from .models import User
 
 class UserSerializer(serializers.ModelSerializer):
     age = serializers.SerializerMethodField(read_only=True)
+    password = serializers.CharField(write_only=True, required=False, style={'input_type': 'password'})
 
     class Meta:
         model = User
         fields = [
             "username",
             "email",
+            "password",
             "date_of_birth",
             "consent",
             "age",
         ]
+
 
     @staticmethod
     def get_age(obj: User) -> int | None:
@@ -38,6 +41,13 @@ class UserSerializer(serializers.ModelSerializer):
         Create user with automatic consent based on age.
         If age < 15, consent is forced to False.
         """
+
+        # hass password
+        # and ensure it is present to create a User object
+        password = validated_data.pop("password", None)
+        if not password:
+            raise serializers.ValidationError("Password is required.")
+
         # Calculate age and set consent accordingly
         date_of_birth = validated_data.get("date_of_birth")
 
@@ -47,7 +57,7 @@ class UserSerializer(serializers.ModelSerializer):
             if age < 15 or "consent" not in validated_data:
                 validated_data["consent"] = False
 
-        password = validated_data.pop("password")
+
         return User.objects.create_user(password=password, **validated_data)
 
     def update(self, instance: User, validated_data):
@@ -64,14 +74,16 @@ class UserSerializer(serializers.ModelSerializer):
             if age < 15:
                 validated_data["consent"] = False
 
-        # Update fields
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-
         # hash password
-        password = validated_data.pop("password")
+        password = validated_data.pop("password", None)
         if password:
             instance.set_password(password)
+
+        # Update other fields
+        for attr, value in validated_data.items():
+            if attr != "password":
+                print(attr)
+                setattr(instance, attr, value)
 
         instance.save()
         return instance
