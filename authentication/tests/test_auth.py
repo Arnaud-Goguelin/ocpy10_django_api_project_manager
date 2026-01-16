@@ -3,7 +3,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from config.conftest import fake
+from config.conftest import fake, UserFactory, authenticated_client, api_client
 
 
 base_auth_url = "auth:"
@@ -13,11 +13,12 @@ base_auth_url = "auth:"
 class TestTokenObtainPair:
     """Tests for login endpoint (JWT token obtain)"""
 
-    def test_login_success(self, api_client, create_user):
+    def test_login_success(self, api_client):
+        test_user = UserFactory()
         url = reverse(f"{base_auth_url}token_obtain_pair")
         data = {
-            "username": create_user.username,
-            "password": create_user.plain_password,
+            "username": test_user.username,
+            "password": test_user.plain_password,
         }
 
         response = api_client.post(url, data, format="json")
@@ -30,11 +31,12 @@ class TestTokenObtainPair:
         assert len(response.data["access"]) > 0
         assert len(response.data["refresh"]) > 0
 
-    def test_login_invalid_credentials(self, api_client, create_user):
+    def test_login_invalid_credentials(self, api_client):
         """Failure with wrong password"""
+        test_user = UserFactory()
         url = reverse(f"{base_auth_url}token_obtain_pair")
         data = {
-            "username": create_user.username,
+            "username": test_user.username,
             # random wrong password
             "password": fake.password(),
         }
