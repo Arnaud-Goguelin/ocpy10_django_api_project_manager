@@ -17,19 +17,29 @@ def api_client():
 
 
 @pytest.fixture
-def create_user(db):
+def user_factory(db):
+    """Factory to create multiple users"""
+    def make_user(**kwargs):
+        defaults = {
+            "username": fake.user_name(),
+            "email": fake.email(),
+            "password": "TestPass123!@#",
+            "date_of_birth": fake.date_of_birth(minimum_age=18, maximum_age=80),
+            "consent": True,
+        }
+        defaults.update(kwargs)
+        password = defaults.pop("password")
+        user = User.objects.create_user(password=password, **defaults)
+        # attach plain password to user for easy access in test
+        user.plain_password = password
+        return user
+    return make_user
+
+
+@pytest.fixture
+def create_user(user_factory):
     """Create and return a test user with random data"""
-    user_password = "TestPass123!@#"
-    user = User.objects.create_user(
-        username=fake.user_name(),
-        email=fake.email(),
-        password=user_password,
-        date_of_birth=fake.date_of_birth(minimum_age=18, maximum_age=80),
-        consent=True,
-    )
-    # Attach password to user object for testing
-    user.plain_password = user_password
-    return user
+    return user_factory()
 
 
 @pytest.fixture

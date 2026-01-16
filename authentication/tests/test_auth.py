@@ -1,11 +1,8 @@
 import pytest
 
 from django.urls import reverse
-from faker import Faker
 from rest_framework import status
-
-
-fake = Faker()
+from config.conftest import fake, api_client, authenticated_client, user_factory, create_user
 
 base_auth_url = "auth:"
 
