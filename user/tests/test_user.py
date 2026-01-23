@@ -5,7 +5,8 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from config.conftest import User, fake, api_client, authenticated_client, UserFactory
+from config.factories import UserFactory, fake
+from ..models import User
 
 
 base_user_url = "user:"
