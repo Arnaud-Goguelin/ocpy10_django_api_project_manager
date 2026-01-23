@@ -4,9 +4,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from config.docs import DocsTypingParameters
-from config.global_permissions import IsAuthor
+from config.global_permissions import IsObjectAuthor
 from config.mixins import ProjectMixin
-from project.permissions import IsContributor
+from project.permissions import ContributorReadOnly
 
 from .models import Comment, Issue
 from .serializers import CommentSerializer, IssueSerializer
@@ -46,7 +46,7 @@ from .serializers import CommentSerializer, IssueSerializer
 )
 class IssueModelViewSet(ProjectMixin, ModelViewSet):
     serializer_class = IssueSerializer
-    permission_classes = [IsAuthenticated, IsAuthor | IsContributor]
+    permission_classes = [IsAuthenticated, IsObjectAuthor | ContributorReadOnly]
 
     def get_queryset(self):
         """Filter by project_id from URL"""
@@ -103,7 +103,7 @@ class IssueModelViewSet(ProjectMixin, ModelViewSet):
 )
 class CommentModelViewSet(ProjectMixin, ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticated, IsAuthor | IsContributor]
+    permission_classes = [IsAuthenticated, IsObjectAuthor | ContributorReadOnly]
 
     def initial(self, request, *args, **kwargs):
         """
