@@ -6,6 +6,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from config.factories import UserFactory, fake
+
 from ..models import User
 
 

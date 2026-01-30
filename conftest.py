@@ -8,6 +8,7 @@ from config.factories import CommentFactory, IssueFactory, ProjectFactory, UserF
 
 # === Fixtures ===
 
+
 @pytest.fixture
 def api_client():
     """Return an API client for making requests"""
