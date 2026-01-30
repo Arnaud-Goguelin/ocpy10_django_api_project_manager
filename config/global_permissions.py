@@ -20,3 +20,23 @@ class IsObjectAuthor(permissions.BasePermission):
             # if object has no author attribute, it is not concerned by this permission
             # example: Contributor object has no author attribute
             return True
+
+
+class IsProjectContributor(permissions.BasePermission):
+    """
+    Custom permission: only allows project contributors or author to create issues/comments.
+    """
+
+    def has_permission(self, request, view):
+        # Allow read methods - filtering is done in get_queryset()
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        # Allow write (POST) methods only if user is a contributor or author of the project
+        project = getattr(view, "project", None)
+
+        if not project:
+            return False
+
+        # Check if user is a contributor or author of the project
+        return project.contributors.filter(id=request.user.id).exists() or project.author == request.user
