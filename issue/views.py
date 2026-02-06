@@ -16,37 +16,54 @@ from .serializers import CommentSerializer, IssueSerializer
     list=extend_schema(
         summary="Get all Issues",
         tags=["Issue"],
-        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value],
+        parameters=[
+            DocsTypingParameters.project_id.value,
+            ],
     ),
     retrieve=extend_schema(
         summary="Get an Issue",
         tags=["Issue"],
-        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value],
+        parameters=[
+            DocsTypingParameters.issue_id.value,
+            DocsTypingParameters.project_id.value,
+            ],
     ),
     create=extend_schema(
         summary="Create an Issue",
         tags=["Issue"],
-        parameters=[DocsTypingParameters.project_id.value],
+        parameters=[
+            DocsTypingParameters.project_id.value,
+            ],
     ),
     update=extend_schema(
         summary="Update entirely an Issue",
         tags=["Issue"],
-        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value],
+        parameters=[
+            DocsTypingParameters.issue_id.value,
+            DocsTypingParameters.project_id.value,
+            ],
     ),
     partial_update=extend_schema(
         summary="Update one or many Issue's fields",
         tags=["Issue"],
-        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value],
+        parameters=[
+            DocsTypingParameters.issue_id.value,
+            DocsTypingParameters.project_id.value,
+            ],
     ),
     destroy=extend_schema(
         summary="Delete an Issue",
         tags=["Issue"],
-        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value],
+        parameters=[
+            DocsTypingParameters.issue_id.value,
+            DocsTypingParameters.project_id.value,
+            ],
     ),
 )
 class IssueModelViewSet(ProjectMixin, ModelViewSet):
     serializer_class = IssueSerializer
     permission_classes = [IsAuthenticated, IsObjectAuthor, IsProjectContributor]
+    lookup_url_kwarg = "issue_id"
 
     def get_queryset(self):
         """Filter by project_id from URL"""
@@ -65,53 +82,61 @@ class IssueModelViewSet(ProjectMixin, ModelViewSet):
     list=extend_schema(
         summary="Get all Comments",
         tags=["Comment"],
-        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value],
+        parameters=[
+            DocsTypingParameters.issue_id.value,
+            DocsTypingParameters.project_id.value,
+            ],
     ),
     retrieve=extend_schema(
         summary="Get an Comment",
         tags=["Comment"],
         parameters=[
-            DocsTypingParameters.project_id.value,
-            DocsTypingParameters.issue_id.value,
             DocsTypingParameters.comment_id.value,
+            DocsTypingParameters.issue_id.value,
+            DocsTypingParameters.project_id.value,
         ],
     ),
     create=extend_schema(
         summary="Create an Comment",
         tags=["Comment"],
-        parameters=[DocsTypingParameters.project_id.value, DocsTypingParameters.issue_id.value],
+        parameters=[
+            DocsTypingParameters.comment_id.value,
+            DocsTypingParameters.issue_id.value,
+            DocsTypingParameters.project_id.value,
+        ],
     ),
     update=extend_schema(
         summary="Update entirely an Comment",
         tags=["Comment"],
         parameters=[
-            DocsTypingParameters.project_id.value,
-            DocsTypingParameters.issue_id.value,
             DocsTypingParameters.comment_id.value,
+            DocsTypingParameters.issue_id.value,
+            DocsTypingParameters.project_id.value,
         ],
     ),
     partial_update=extend_schema(
         summary="Update one or many Comment's fields",
         tags=["Comment"],
         parameters=[
-            DocsTypingParameters.project_id.value,
-            DocsTypingParameters.issue_id.value,
             DocsTypingParameters.comment_id.value,
+            DocsTypingParameters.issue_id.value,
+            DocsTypingParameters.project_id.value,
         ],
     ),
     destroy=extend_schema(
         summary="Delete an Comment",
         tags=["Comment"],
         parameters=[
-            DocsTypingParameters.project_id.value,
-            DocsTypingParameters.issue_id.value,
             DocsTypingParameters.comment_id.value,
+            DocsTypingParameters.issue_id.value,
+            DocsTypingParameters.project_id.value,
         ],
     ),
 )
 class CommentModelViewSet(ProjectMixin, ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated, IsObjectAuthor, IsProjectContributor]
+    lookup_url_kwarg = "comment_id"
 
     def initial(self, request, *args, **kwargs):
         """
