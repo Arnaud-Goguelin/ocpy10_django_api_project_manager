@@ -18,7 +18,7 @@ from .serializers import CommentSerializer, IssueSerializer
         tags=["Issue"],
         parameters=[
             DocsTypingParameters.project_id.value,
-            ],
+        ],
     ),
     retrieve=extend_schema(
         summary="Get an Issue",
@@ -26,14 +26,14 @@ from .serializers import CommentSerializer, IssueSerializer
         parameters=[
             DocsTypingParameters.issue_id.value,
             DocsTypingParameters.project_id.value,
-            ],
+        ],
     ),
     create=extend_schema(
         summary="Create an Issue",
         tags=["Issue"],
         parameters=[
             DocsTypingParameters.project_id.value,
-            ],
+        ],
     ),
     update=extend_schema(
         summary="Update entirely an Issue",
@@ -41,7 +41,7 @@ from .serializers import CommentSerializer, IssueSerializer
         parameters=[
             DocsTypingParameters.issue_id.value,
             DocsTypingParameters.project_id.value,
-            ],
+        ],
     ),
     partial_update=extend_schema(
         summary="Update one or many Issue's fields",
@@ -49,7 +49,7 @@ from .serializers import CommentSerializer, IssueSerializer
         parameters=[
             DocsTypingParameters.issue_id.value,
             DocsTypingParameters.project_id.value,
-            ],
+        ],
     ),
     destroy=extend_schema(
         summary="Delete an Issue",
@@ -57,7 +57,7 @@ from .serializers import CommentSerializer, IssueSerializer
         parameters=[
             DocsTypingParameters.issue_id.value,
             DocsTypingParameters.project_id.value,
-            ],
+        ],
     ),
 )
 class IssueModelViewSet(ProjectMixin, ModelViewSet):
@@ -85,7 +85,7 @@ class IssueModelViewSet(ProjectMixin, ModelViewSet):
         parameters=[
             DocsTypingParameters.issue_id.value,
             DocsTypingParameters.project_id.value,
-            ],
+        ],
     ),
     retrieve=extend_schema(
         summary="Get an Comment",

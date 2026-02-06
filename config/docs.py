@@ -6,10 +6,9 @@ from drf_spectacular.utils import OpenApiParameter
 
 
 class DocsTypingParameters(Enum):
-
     user_id = OpenApiParameter(
         name="user_id", type=OpenApiTypes.INT, location=OpenApiParameter.PATH, description="User id"
-        )
+    )
 
     contributor_id = OpenApiParameter(
         name="contributor_id", type=OpenApiTypes.INT, location=OpenApiParameter.PATH, description="Contributor id"

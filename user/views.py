@@ -5,6 +5,7 @@ from rest_framework.generics import CreateAPIView, RetrieveAPIView, RetrieveUpda
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from config.docs import DocsTypingParameters
+
 from .models import User
 from .permissions import IsUserSelf
 from .renderers import CSVRenderer
@@ -33,28 +34,28 @@ class SignupView(CreateAPIView):
         tags=["User"],
         parameters=[
             DocsTypingParameters.user_id.value,
-            ],
+        ],
     ),
     put=extend_schema(
         summary="Update entirely user's profile",
         tags=["User"],
         parameters=[
             DocsTypingParameters.user_id.value,
-            ],
+        ],
     ),
     patch=extend_schema(
         summary="Update one or many user's profile fields",
         tags=["User"],
         parameters=[
             DocsTypingParameters.user_id.value,
-            ],
+        ],
     ),
     delete=extend_schema(
         summary="Delete user's account",
         tags=["User"],
         parameters=[
             DocsTypingParameters.user_id.value,
-            ],
+        ],
     ),
 )
 class UserProfileView(RetrieveUpdateDestroyAPIView):

@@ -52,7 +52,9 @@ class TestContributorRetrieve:
         create_project.contributors.add(other_user)
         contributor = Contributor.objects.filter(project=create_project, user=other_user).first()
 
-        url = reverse(f"{base_contributor_url}detail", kwargs={"project_id": create_project.pk, "contributor_id": contributor.pk})
+        url = reverse(
+            f"{base_contributor_url}detail", kwargs={"project_id": create_project.pk, "contributor_id": contributor.pk}
+        )
 
         response = authenticated_client.get(url)
 
@@ -66,7 +68,9 @@ class TestContributorRetrieve:
         other_project = ProjectFactory(author=other_author)
         contributor = Contributor.objects.get(project=other_project, user=other_author)
 
-        url = reverse(f"{base_contributor_url}detail", kwargs={"project_id": other_project.pk, "contributor_id": contributor.pk})
+        url = reverse(
+            f"{base_contributor_url}detail", kwargs={"project_id": other_project.pk, "contributor_id": contributor.pk}
+        )
 
         response = authenticated_client.get(url)
 
@@ -118,7 +122,9 @@ class TestContributorDelete:
         create_project.contributors.add(contributor_user)
         contributor = Contributor.objects.get(project=create_project, user=contributor_user)
 
-        url = reverse(f"{base_contributor_url}detail", kwargs={"project_id": create_project.pk, "contributor_id": contributor.pk})
+        url = reverse(
+            f"{base_contributor_url}detail", kwargs={"project_id": create_project.pk, "contributor_id": contributor.pk}
+        )
 
         response = authenticated_client.delete(url)
 
@@ -135,7 +141,9 @@ class TestContributorDelete:
         project.contributors.add(contributor_user)
         contributor = Contributor.objects.get(project=project, user=contributor_user)
 
-        url = reverse(f"{base_contributor_url}detail", kwargs={"project_id": project.pk, "contributor_id": contributor.pk})
+        url = reverse(
+            f"{base_contributor_url}detail", kwargs={"project_id": project.pk, "contributor_id": contributor.pk}
+        )
 
         response = authenticated_client.delete(url)
 
