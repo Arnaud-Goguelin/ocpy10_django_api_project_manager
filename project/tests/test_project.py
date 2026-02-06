@@ -75,7 +75,6 @@ class TestProjectCreate:
         """Success: Create a new project"""
         url = reverse(f"{base_project_url}project-list")
         data = {
-            "author": authenticated_client.user.pk,
             "name": fake.catch_phrase(),
             "description": fake.text(max_nb_chars=200),
             "type": fake.random_element([*Project.ProjectTypes]),
