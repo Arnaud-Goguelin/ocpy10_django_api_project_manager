@@ -12,11 +12,27 @@ class ProjectSerializer(ModelSerializer):
         fields = ["id", "name", "type", "description", "author", "contributors", "created_at"]
         # add contributors to read_only_fields because they are handled in other endpoints
         read_only_fields = ["created_at", "contributors"]
+        # author is optional in input, but auto-set on creation
+        # this allows transfer ownership of a project to another user on PUT/PATCH request
+        extra_kwargs = {"author": {"required": False}}
 
     def create(self, validated_data):
         # Automatically set author
         validated_data["author"] = self.context["request"].user
         return super().create(validated_data)
+
+
+class ProjectCreateSerializer(ProjectSerializer):
+    """Serializer for Project creation - author is auto-set from request.user"""
+
+    class Meta(ProjectSerializer.Meta):
+        read_only_fields = ["created_at", "contributors", "author"]
+
+
+class ProjectUpdateSerializer(ProjectSerializer):
+    """Serializer for Project update - allows author transfer"""
+
+    pass  # Uses the default ProjectSerializer behavior
 
 
 class ContributorSerializer(ModelSerializer):
