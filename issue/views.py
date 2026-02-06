@@ -54,8 +54,8 @@ class IssueModelViewSet(ProjectMixin, ModelViewSet):
             Issue.objects.select_related("project", "author")
             .filter(project=self.project)
             # object__attribute syntax to go through relationship
-            # project__author = contributor.project.author
-            .filter(Q(project__author=self.request.user) | Q(project__contributors=self.request.user))
+            # project__contributors = project.contributors.user
+            .filter(Q(author=self.request.user) | Q(project__contributors=self.request.user))
             # avoid duplicates
             .distinct()
         )
