@@ -132,11 +132,11 @@ class CommentModelViewSet(ProjectMixin, ModelViewSet):
     def get_queryset(self):
         """Filter comments by issue"""
         # object__attribute syntax to go through relationship
-        # project__author = contributor.project.author
+        # issue__project__contributors = issue.project.contributor.user
         return (
             (
                 (Comment.objects.select_related("issue", "author").filter(issue=self.issue)).filter(
-                    Q(issue__author=self.request.user) | Q(issue__project__contributors=self.request.user)
+                    Q(author=self.request.user) | Q(issue__project__contributors=self.request.user)
                 )
             )
             # avoid duplicates
