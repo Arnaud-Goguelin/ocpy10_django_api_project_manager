@@ -20,6 +20,7 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Project management API',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False, # create response schema on request, not in initial html template
+    'CAMELIZE_NAMES': True,
 }
 
 # SQLite DB for dev
