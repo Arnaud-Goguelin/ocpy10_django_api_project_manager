@@ -9,7 +9,7 @@ from config.mixins import ProjectMixin
 from project.models import Contributor, Project
 
 from .permissions import WriteContributor
-from .serializers import ContributorSerializer, ProjectSerializer
+from .serializers import ContributorSerializer, ProjectCreateSerializer, ProjectSerializer, ProjectUpdateSerializer
 
 
 @extend_schema_view(
@@ -26,16 +26,19 @@ from .serializers import ContributorSerializer, ProjectSerializer
     create=extend_schema(
         summary="Create a Project",
         tags=["Project"],
+        request=ProjectCreateSerializer,
     ),
     update=extend_schema(
         summary="Update entirely a Project",
         tags=["Project"],
         parameters=[DocsTypingParameters.project_id.value],
+        request=ProjectUpdateSerializer,
     ),
     partial_update=extend_schema(
         summary="Update one or many Project's fields",
         tags=["Project"],
         parameters=[DocsTypingParameters.project_id.value],
+        request=ProjectUpdateSerializer,
     ),
     destroy=extend_schema(
         summary="Delete Project",
@@ -46,6 +49,14 @@ from .serializers import ContributorSerializer, ProjectSerializer
 class ProjectModelViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated, IsObjectAuthor]
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return ProjectCreateSerializer
+        elif self.action in ["update", "partial_update"]:
+            return ProjectUpdateSerializer
+        else:
+            return ProjectSerializer
 
     def get_queryset(self):
         user = self.request.user
