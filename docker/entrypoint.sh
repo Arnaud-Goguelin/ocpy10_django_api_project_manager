@@ -19,10 +19,21 @@ echo "Starting application in $ENVIRONMENT mode..."
     sh /usr/local/bin/scheduler.sh &
 
 if [ "$ENVIRONMENT" = "local" ]; then
+    echo "Running database migrations..."
+    python manage.py migrate --noinput
+
+    echo "Creating test users..."
+    python manage.py create_test_users
+
     echo "Running Django local server..."
     exec python manage.py runserver 0.0.0.0:8000
 else
-  # use uvicorn as it support natively async request
+    echo "Running database migrations..."
+    python manage.py migrate --noinput
+
+    echo "Collecting static files..."
+    python manage.py collectstatic --noinput
+
     echo "Running production server with uvicorn (workers: $WORKERS)..."
     exec uvicorn config.asgi:application --host 0.0.0.0 --port 8000 --workers "$WORKERS"
 fi
