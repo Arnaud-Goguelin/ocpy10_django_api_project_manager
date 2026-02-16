@@ -49,6 +49,10 @@ makemigrations:
 collectstatic:
     python manage.py collectstatic --noinput
 
+# Create test users
+test-users:
+    python manage.py create_test_users
+
 # Run the development server
 run:
     python manage.py runserver
