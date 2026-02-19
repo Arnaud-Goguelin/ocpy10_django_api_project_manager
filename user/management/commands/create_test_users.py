@@ -8,12 +8,22 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         users_data = [
-            {"username": "Bob", "password": "softdesk_api"},
-            {"username": "Tom", "password": "softdesk_api"},
+            {"username": "Bob", "password": "softdesk_api", "date_of_birth": "1990-01-01", "consent": True},
+            {
+                "username": "Tom",
+                "password": "softdesk_api",
+                "date_of_birth": "2023-01-01",
+                "consent": False,
+            },
         ]
 
         for user_data in users_data:
-            user, created = User.objects.get_or_create(username=user_data["username"], defaults={"is_active": True})
+            user, created = User.objects.get_or_create(
+                username=user_data["username"],
+                date_of_birth=user_data.get("date_of_birth"),
+                consent=user_data.get("consent"),
+                defaults={"is_active": True},
+            )
             if created:
                 user.set_password(user_data["password"])
                 user.save()
